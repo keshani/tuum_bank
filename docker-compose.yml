@@ -1,0 +1,32 @@
+version: '3.1'
+services:
+  app:
+    build: .
+    container_name: app
+    ports:
+      - 9093:9093
+    depends_on:
+      - postgresqldb
+      - rabbitmq
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresqldb:5432/db_tuum
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=psw_tuum
+  postgresqldb:
+    image: postgres:13.1-alpine
+    container_name: postgresqldb
+    ports:
+      - 5436:5432
+    volumes:
+      - ./data:/docker-entrypoint-initdb.d/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=psw_tuum
+      - POSTGRES_DB=db_tuum
+  rabbitmq:
+    image: rabbitmq
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+
