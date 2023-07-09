@@ -7,10 +7,9 @@ import com.tuum.bank.modules.account.service.AccountService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.nio.channels.ScatteringByteChannel;
 
 import static com.tuum.bank.messaging.MessageQueueNames.ACCOUNT_CREATION;
 
@@ -20,19 +19,20 @@ public class AccountController {
     private final AccountService accountService;
     Logger LOGGER = LoggerFactory.getLogger(AccountController.class);
 
+    @Autowired
     public AccountController(AccountService accountService) {
         this.accountService = accountService;
     }
 
     @GetMapping("/{accountId}")
-    public ResponseEntity<Account> getAccountById(@PathVariable("accountId") String accountId) {
+    public ResponseEntity<Account> getAccountById(@PathVariable("accountId") String accountId) throws AccountNotFoundException {
         try {
             Account account = accountService.getAccountById(accountId);
             if (account == null) {
                 throw new AccountNotFoundException("No account found for given accountid");
             }
             return ResponseEntity.ok(account);
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             LOGGER.error("AccountController::getAccountById Error", ex);
             throw ex;
         }
@@ -43,7 +43,7 @@ public class AccountController {
         Account account;
         try {
             account = accountService.saveAccount(accountDto);
-            LOGGER.info("Create New Account with AccountId: "+ account+ " for customer id: "+account.getCustomerId());
+            LOGGER.info("Create New Account with AccountId: " + account + " for customer id: " + account.getCustomerId());
             // Publish message to account creation
             try {
                 accountService.publishMessageToQueue(ACCOUNT_CREATION, account);
@@ -51,7 +51,7 @@ public class AccountController {
             } catch (Exception ex) {
                 LOGGER.error("AccountController::error occured while publishing msg Error", ex);
             }
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             LOGGER.error("AccountController::createAccount Error", ex);
             throw ex;
         }

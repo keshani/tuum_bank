@@ -32,6 +32,6 @@ public class TransactionDto {
     String transDescription;
 
     @NotNull(message = "Amount is required")
-    @DecimalMin(value = "0.0", inclusive = true, message = "Amount must be non-negative")
+    @DecimalMin(value = "0.01", inclusive = true, message = "Amount must be non-negative")
     BigDecimal amount;
 }

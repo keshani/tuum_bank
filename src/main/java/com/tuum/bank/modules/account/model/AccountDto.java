@@ -27,4 +27,10 @@ public class AccountDto {
 
     @NotNull(message = "Currency Types cannot be empty")
     List<CurrencyType> currencyTypeList;
+
+    public AccountDto(String customerId, String country, List<CurrencyType> currencyTypeList) {
+        this.customerId = customerId;
+        this.country = country;
+        this.currencyTypeList = currencyTypeList;
+    }
 }

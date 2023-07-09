@@ -1,7 +1,6 @@
 package com.tuum.bank.modules.account.mapper;
 
 import com.tuum.bank.modules.account.model.Account;
-import com.tuum.bank.modules.account.model.AccountBalance;
 import com.tuum.bank.modules.account.model.AccountDto;
 import org.apache.ibatis.annotations.*;
 
@@ -12,7 +11,7 @@ public interface AccountMapper {
 
     @Insert("INSERT INTO account (account_id, customer_id, country )" +
             " VALUES ( #{accountId},#{customerId}, #{country})")
-    void insertAccount(AccountDto account);
+    int insertAccount(AccountDto account);
 
     @Select("SELECT * FROM account WHERE account_id = #{accountId}")
     @Results({

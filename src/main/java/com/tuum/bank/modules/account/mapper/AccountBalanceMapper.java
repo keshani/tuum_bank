@@ -1,6 +1,5 @@
 package com.tuum.bank.modules.account.mapper;
 
-import com.tuum.bank.common.models.CurrencyType;
 import com.tuum.bank.modules.account.model.AccountBalance;
 import org.apache.ibatis.annotations.*;
 
@@ -10,7 +9,7 @@ import java.util.List;
 @Mapper
 public interface AccountBalanceMapper {
     @Insert("INSERT INTO account_balance (account_id, currency_Type) VALUES ( #{accountId},#{currencyType})")
-    void insertAccountBalance(AccountBalance accountBalance);
+    int insertAccountBalance(AccountBalance accountBalance);
 
     @Update("UPDATE account_balance SET balance = #{balance} WHERE id = #{id}")
     void updateAccountBalance(Long id, BigDecimal balance);
@@ -25,7 +24,7 @@ public interface AccountBalanceMapper {
     List<AccountBalance> getAccountBalancesByAccountId(String accountId);
 
     @Select("SELECT * FROM account_balance WHERE account_id = #{accountId} " +
-            "AND currency_Type = #{currencyType}" )
+            "AND currency_Type = #{currencyType}")
     @Results({
             @Result(property = "accountId", column = "account_id"),
             @Result(property = "id", column = "id"),

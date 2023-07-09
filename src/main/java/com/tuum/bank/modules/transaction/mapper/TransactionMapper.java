@@ -1,9 +1,6 @@
 package com.tuum.bank.modules.transaction.mapper;
 
-import com.tuum.bank.modules.account.model.Account;
-import com.tuum.bank.modules.account.model.AccountBalance;
 import com.tuum.bank.modules.transaction.model.Transaction;
-import com.tuum.bank.modules.transaction.model.TransactionDto;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -16,7 +13,7 @@ public interface TransactionMapper {
             " VALUES ( #{accountId},#{currencyType}, #{transferAmount}, #{balance}," +
             " #{transactionType}, #{transDescription}, #{transactionDatetime})")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-    void saveTransaction(Transaction transaction);
+    int saveTransaction(Transaction transaction);
 
     @Select("SELECT * FROM transactions WHERE account_id = #{accountId}")
     @Results({

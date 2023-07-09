@@ -9,6 +9,7 @@ import com.tuum.bank.modules.account.model.AccountBalance;
 import com.tuum.bank.modules.account.model.AccountDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ public class AccountService {
 
     Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
 
+    @Autowired
     public AccountService(AccountMapper accountMapper, AccountBalanceMapper accountBalanceMapper, MessageService messageService) {
         this.accountMapper = accountMapper;
         this.accountBalanceMapper = accountBalanceMapper;

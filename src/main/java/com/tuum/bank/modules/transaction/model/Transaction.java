@@ -24,4 +24,14 @@ public class Transaction implements Serializable {
     BigDecimal transferAmount;
     BigDecimal balance;
     LocalDateTime transactionDatetime;
+
+    public Transaction(String accountId, CurrencyType currencyType, TransactionType transactionType, String transDescription, BigDecimal transferAmount, BigDecimal balance, LocalDateTime transactionDatetime) {
+        this.accountId = accountId;
+        this.currencyType = currencyType;
+        this.transactionType = transactionType;
+        this.transDescription = transDescription;
+        this.transferAmount = transferAmount;
+        this.balance = balance;
+        this.transactionDatetime = transactionDatetime;
+    }
 }

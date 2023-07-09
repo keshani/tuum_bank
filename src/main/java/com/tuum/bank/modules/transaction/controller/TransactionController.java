@@ -1,8 +1,6 @@
 package com.tuum.bank.modules.transaction.controller;
 
-import com.tuum.bank.modules.account.controller.AccountController;
-import com.tuum.bank.modules.account.model.Account;
-import com.tuum.bank.modules.account.model.AccountDto;
+import com.tuum.bank.exception.exceptionType.AccountNotFoundException;
 import com.tuum.bank.modules.transaction.model.Transaction;
 import com.tuum.bank.modules.transaction.model.TransactionDto;
 import com.tuum.bank.modules.transaction.service.TransactionService;
@@ -13,8 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import static com.tuum.bank.messaging.MessageQueueNames.ACCOUNT_CREATION;
 
 @RestController
 @RequestMapping("/tuum/v1/transactionHandler")
@@ -28,7 +24,7 @@ public class TransactionController {
     }
 
     @PostMapping("/transactions")
-    public ResponseEntity<Transaction> addTransaction(@Valid @RequestBody TransactionDto transactionDto) {
+    public ResponseEntity<Transaction> addTransaction(@Valid @RequestBody TransactionDto transactionDto) throws AccountNotFoundException {
         Transaction transaction;
       try {
           transaction = transactionService.saveTransaction(transactionDto);
@@ -50,7 +46,7 @@ public class TransactionController {
     }
 
     @GetMapping("/transactions/{accountId}")
-    public ResponseEntity<List<Transaction>> getAccountById(@PathVariable("accountId") String accountId) {
+    public ResponseEntity<List<Transaction>> getAccountById(@PathVariable("accountId") String accountId) throws AccountNotFoundException {
         try {
             List<Transaction> transactionList = transactionService.getTransactionsByAccountId(accountId);
             return  ResponseEntity.ok(transactionList);
