@@ -24,9 +24,16 @@ services:
       - POSTGRES_PASSWORD=psw_tuum
       - POSTGRES_DB=db_tuum
   rabbitmq:
-    image: rabbitmq
+    image: rabbitmq:3.12-management
     container_name: rabbitmq
     ports:
       - 5672:5672
       - 15672:15672
-
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_CONFIG_FILE=/etc/rabbitmq/rabbitmq.conf
+    volumes:
+      - ./rabbitmq-data:/var/lib/rabbitmq
+      - ./rabbitmq-config:/etc/rabbitmq/
+    command: rabbitmq-server

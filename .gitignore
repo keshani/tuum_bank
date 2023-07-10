@@ -35,3 +35,5 @@ out/
 
 ### VS Code ###
 .vscode/
+/rabbitmq-data/mnesia/
+/rabbitmq-data/.erlang.cookie

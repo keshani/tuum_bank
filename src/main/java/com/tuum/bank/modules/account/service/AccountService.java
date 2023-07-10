@@ -37,7 +37,6 @@ public class AccountService {
 
     @Transactional
     public Account saveAccount(AccountDto accountDto) {
-
         String accountId = UUID.randomUUID().toString();
         accountDto.setAccountId(accountId);
         accountMapper.insertAccount(accountDto);

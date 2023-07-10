@@ -43,7 +43,15 @@ public class AccountMapperTest {
      }
 
     @Test
-    void test_get_account_by_id() {
+    @Transactional
+    void test_save_account_with_exsiting_accountId() {
+        List<CurrencyType> currencyType = List.of(CurrencyType.EUR, CurrencyType.GBP);
+        AccountDto accountDto =  new AccountDto("123456","testcustomer1", "Estonia", currencyType);
+        assertThrows(RuntimeException.class,() -> mapper.insertAccount(accountDto));
+    }
+
+    @Test
+    void test_get_account_by_accountid() {
         Account account = mapper.getAccount("123456");
         assertAll( () -> assertEquals("123456", account.getAccountId()),
                 () -> assertEquals("TestTuumCustomer", account.getCustomerId()),
@@ -66,7 +74,7 @@ public class AccountMapperTest {
     }
 
     @Test
-    void test_get_account_with_balance_by_id() {
+    void test_get_accountbalance_by_accountid() {
         List<CurrencyType> currencyType = List.of(CurrencyType.EUR);
         Account account = mapper.getAccountWithBalances("123456");
         assertAll( () -> assertEquals("123456", account.getAccountId()),
