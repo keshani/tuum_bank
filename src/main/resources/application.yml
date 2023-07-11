@@ -1,6 +1,6 @@
 spring:
   datasource:
-    ##url: jdbc:postgresql://postgresqldb:5432/db_tuum
+   ## url: jdbc:postgresql://localhost:5432/db_tuum
     url: jdbc:postgresql://postgresql:5432/db_tuum
     username: postgres
     password: psw_tuum

@@ -11,10 +11,8 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
   h2:
     console.enabled: true
-logging:
-  level:
-    com:
-      citybuilder:
-        cityviewer: DEBUG
-  file: cityviewer.log
-  path: /
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
