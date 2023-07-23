@@ -37,24 +37,29 @@ public class TransactionService {
     }
 
     @Transactional
-    public Transaction saveTransaction(TransactionDto transactionDto) throws AccountNotFoundException {
-        AccountBalance accountBalance = this.accountBalanceMapper.getBalanceByAccountIdAndCurrency(transactionDto.getAccountId()
-                , transactionDto.getCurrencyType().toString());
-
-        // validate the transaction before saving
-        this.validateTransaction(transactionDto, accountBalance);
-
+    public  Transaction saveTransaction(TransactionDto transactionDto) throws AccountNotFoundException {
         Transaction transaction = mapTransactionDtoToTranaction(transactionDto);
 
-        // set the remaining balance
-        BigDecimal remainingBalance = calculateRemainingBalance(transactionDto, accountBalance);
-        transaction.setBalance(remainingBalance);
+         Object lock = new Object();
+        synchronized(lock) {
 
-        //save the transaction
-        this.transactionMapper.saveTransaction(transaction);
-        //update the balance in the relevent account
-        this.accountBalanceMapper.updateAccountBalance(accountBalance.getId(), remainingBalance);
+            AccountBalance accountBalance = this.accountBalanceMapper.getBalanceByAccountIdAndCurrency(transactionDto.getAccountId()
+                    , transactionDto.getCurrencyType().toString());
 
+            // validate the transaction before saving
+            this.validateTransaction(transactionDto, accountBalance);
+
+
+            // set the remaining balance
+            BigDecimal remainingBalance = calculateRemainingBalance(transactionDto, accountBalance);
+            transaction.setBalance(remainingBalance);
+
+            //save the transaction
+            this.transactionMapper.saveTransaction(transaction);
+            //update the balance in the relevent account
+            this.accountBalanceMapper.updateAccountBalance(accountBalance.getId(), remainingBalance);
+
+        }
         return transaction;
     }
 
@@ -77,9 +82,10 @@ public class TransactionService {
         return transaction;
     }
 
-    public void validateTransaction(TransactionDto transactionDto, AccountBalance accountBalance) throws AccountNotFoundException {
+    public void validateTransaction(TransactionDto transactionDto, AccountBalance accountBalance){
         if (accountBalance == null) {
-            throw new AccountNotFoundException("There is no account with given currency type: " + transactionDto.getAccountId());
+            throw new RuntimeException();
+           // throw new AccountNotFoundException("There is no account with given currency type: " + transactionDto.getAccountId());
         }
         // check the transction amount is less than or equal to zero
         if (transactionDto.getAmount() == null ||

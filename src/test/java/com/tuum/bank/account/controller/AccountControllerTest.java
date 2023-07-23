@@ -130,6 +130,7 @@ public class AccountControllerTest {
                     .andExpect(status().isBadRequest());
         }
     }
+
     @Test
     public void test_get_account_with_valid_accountId() throws Exception {
         List<CurrencyType> currencyType = List.of(CurrencyType.EUR, CurrencyType.GBP, CurrencyType.SEK, CurrencyType.USD);
